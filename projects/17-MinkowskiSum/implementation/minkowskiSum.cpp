@@ -58,20 +58,22 @@ vector<point> minkowskiSum(vector<point>& a, vector<point>& b) {
         int j1 = j+1;
         if (j1 == m) j1 = 0;
 
-        // Abstractly stores which slope is higher between a[i] -> a[i+1]
-        // and b[j] -> b[j+1]. Positive if first slope is higher,
-        // zero if equivalent slopes, and negative otherwise
-        double slopeDif = (a[i1].y - a[i].y)*(b[j1].x - b[j].x) - (b[j1].y - b[j].y) *(a[i1].x - a[i].x);
+        // By math, stores which polar angle is higher between a[i] -> a[i+1]
+        // and b[j] -> b[j+1]. Positive if first polar angle is higher,
+        // zero if equivalent polar angles, and negative otherwise.
+        // More concretely, this is the cross product of (b[j1] - b[j]) and (a[i1] - a[i])
+        double crossProd = (a[i1].y - a[i].y)*(b[j1].x - b[j].x) - (b[j1].y - b[j].y) *(a[i1].x - a[i].x);
 
-        // If the slope from a[i] -> a[i+1] is higher, we 
+        // The cross product tells us which edge has higher polar angle. 
+        // If a[i] -> a[i+1] is higher polar angle,
         // move to the next point in b. If they are equal,
         // we move to the next point in both. If a[i] -> a[i+1] is lower,
         // we move to the next point in a. This ensures we are iterating
-        // forward by increasing slope of the edge segments
-        if (slopeDif > 0) {
+        // forward by increasing polar angle of the edge segments
+        if (crossProd > 0) {
             j = j1;
             s++;
-        } else if (slopeDif == 0) {
+        } else if (crossProd == 0) {
             i = i1;
             j = j1;
             t++; s++;
