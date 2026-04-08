@@ -46,21 +46,15 @@ def minkowskiSum(poly1, poly2):
         # append sum of current points
         polySum.append(poly1[ptr1] + poly2[ptr2])
 
-        
-        if ptr1 >= len(poly1) - 2: # if we are at the end of poly1/poly2
-            ptr2 += 1
-        elif ptr2 >= len(poly2) - 2:
+        # compute cross product, determines which edge is more ccw
+        cross = (poly1[ptr1+1] - poly1[ptr1]).cross(poly2[ptr2+1] - poly2[ptr2])
+        if cross > 0:
             ptr1 += 1
-        else:
-            # compute cross product, determines which edge is more ccw
-            cross = (poly1[ptr1+1] - poly1[ptr1]).cross(poly2[ptr2+1] - poly2[ptr2])
-            if cross > 0:
-                ptr1 += 1
-            elif cross < 0:
-                ptr2 += 1
-            else: # if equally ccw increment both
-                ptr1 += 1
-                ptr2 += 1
+        elif cross < 0:
+            ptr2 += 1
+        else: # if equally ccw increment both
+            ptr1 += 1
+            ptr2 += 1
     
     return polySum
 
